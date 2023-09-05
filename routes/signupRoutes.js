@@ -6,4 +6,6 @@ const router = express.Router();
 
 router.post('/user/signup',SignupController.postSignup)
 
+router.post('/check-email-exists', SignupController.postLogin)
+
 module.exports = router

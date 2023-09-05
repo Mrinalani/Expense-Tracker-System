@@ -21,7 +21,7 @@ async function signUp(event){
     }
     }catch(err){
         console.log('........error')
-        document.body.innerHTML += `<div style="color:red;">Errpr:${err.message}</div>`
+        document.body.innerHTML += `<div style="color:red;">Error:${err.message}</div>`
     }
 
     event.target.reset()
