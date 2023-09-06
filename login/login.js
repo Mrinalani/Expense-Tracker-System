@@ -6,7 +6,7 @@ async function Login(event){
   const Password = event.target.password.value;
 
   const loginDetails = {
-    Email,
+    Email,  
     Password
 
   }

@@ -5,7 +5,7 @@ const Signup = sequelize.define('signup',{
     id:{
         type:Sequelize.INTEGER,
         autoIncrement: true,
-        allowNull: false,
+        allowNull: false,  
         primaryKey: true
     },
     Name: {

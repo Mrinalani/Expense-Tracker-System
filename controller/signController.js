@@ -52,9 +52,9 @@ exports.postLogin = async (req, res, next) => {
       if (present === null) {
         console.log("Email not found");
         if(emailcheck == null){
-          res.status(404).json({ message: "Email not found", Exist: false });
+          res.status(401).json({ message: "user not found", Exist: false });
         }else{
-          res.status(400).json({ message: "password is incorrect", Exist: false });
+          res.status(404).json({ message: "user not authorised", Exist: false });
         }
         
       }
