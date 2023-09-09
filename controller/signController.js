@@ -1,5 +1,6 @@
 const signup = require('../model/signupModel');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 
 function isstringvalid(string){
@@ -9,6 +10,7 @@ function isstringvalid(string){
         return false;
     }
 }
+
 
 exports.postSignup = async(req,res,next)=>{
 
@@ -47,6 +49,11 @@ exports.postSignup = async(req,res,next)=>{
   }
 }
 
+function generateExcessToken(id,name){
+  return jwt.sign({signupId:id,name:name},'mysecretcode')
+  
+}
+
 exports.postLogin = async (req, res, next) => {
   try {
     const Email = req.body.Email;
@@ -58,6 +65,7 @@ exports.postLogin = async (req, res, next) => {
       return res.status(400).json({ message: 'Email or password is missing', Exist: false });
     }
     const user = await signup.findAll({where:{Email}})
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>", user)
           
      if(user.length>0){
        bcrypt.compare(Password,user[0].Password, (err, result)=>{
@@ -65,7 +73,7 @@ exports.postLogin = async (req, res, next) => {
          return res.status(500).json({message:"something went wrong" , Exist:false})
         }
         if(result == true){
-          return res.status(200).json({message:"user logged successfully" , Exist:true})
+          return res.status(200).json({message:"user logged successfully" , Exist:true , token:generateExcessToken(user[0].id,user[0].Name)})
         }else{
           return res.status(400).json({message:"password is incorrect" , Exist:false})
         }

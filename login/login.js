@@ -17,6 +17,10 @@ async function Login(event){
      if(response.data.Exist == true){
         
         alert("user logged in successfully")
+
+        localStorage.setItem('token',response.data.token)
+
+        window.location.href = '../expense.html';
      }
       
     }catch(err){

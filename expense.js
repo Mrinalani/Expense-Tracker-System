@@ -14,7 +14,8 @@
     console.log(obj)
       
     try {
-        const response = await axios.post("http://localhost:3000/add-expense", obj);
+      const token = localStorage.getItem('token')
+      const response = await axios.post("http://localhost:3000/add-expense", obj,{ headers: { "Authorization": token } });
             console.log(response)
           ShowUserOnScreen(response.data.newUserDetails);
     
@@ -25,7 +26,7 @@
     }
     
 
-function ShowUserOnScreen(obj){
+async function ShowUserOnScreen(obj){
     const parentElement = document.getElementById('itemlist')
     const children = document.createElement('li');
     children.textContent = obj.expense+"-"+obj.description+"-"+obj.category
@@ -33,21 +34,43 @@ function ShowUserOnScreen(obj){
     const deletebutton = document.createElement('input');
     deletebutton.type = "button";
     deletebutton.value = 'delete';
-    deletebutton.onclick = () => {
+    deletebutton.onclick = async() => {
+      console.log(obj.id)
+      deleteUser(obj.id)
        parentElement.removeChild(children);
     }
     children.appendChild(deletebutton);
   parentElement.appendChild(children);
 }
 
+async function deleteUser(userid){
+  try{
+    const token = localStorage.getItem('token')
+  console.log("id=",userid)
+ const response =  await axios.delete(`http://localhost:3000/delete-Expense/${userid}`,{ headers: { "Authorization": token } })
+
+ console.log("%%%%%%",response)
+  }catch(error){
+    console.log(error)
+  }
+ 
+}
+
 window.addEventListener("DOMContentLoaded", async() => {
     try{
-   const response =  await axios.get("http://localhost:3000/get-expense")
-        for (var i = 0; i < response.data.RetrivedData.length; i++) {
-          const obj = response.data.RetrivedData[i];
-          sellingPrices.push(obj.sellingPrice);
+      const token = localStorage.getItem('token')
+      console.log(">>>", token)
+   const response =  await axios.get("http://localhost:3000/get-expense", { headers: { "Authorization": token } });
+   console.log(response)
+   if(response.data.message == false){
+    console.log("No Data Found Yet")
+   }
+   else{
+        for (var i = 0; i < response.data.retrievedData.length; i++) {
+          const obj = response.data.retrievedData[i];
           ShowUserOnScreen(obj);
         }
+      }
     }catch(error){
         console.log(error);
       };
