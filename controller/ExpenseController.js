@@ -26,7 +26,7 @@ exports.deleteExpense = async (req, res, next) => {
     const prodId = req.params.productId;
     const data = await Expense.findByPk(prodId);
     if (data.signupId !== req.user.id) {
-        return res.status(403).json({ error: "Permission denied. You can only delete your own expenses." });
+        return res.status(202).json({ message: "Permission denied. You can only delete your own expenses." });
       }
     console.log("destroyedData =", data);
     const deletedItem = await data.destroy();
@@ -40,6 +40,7 @@ exports.deleteExpense = async (req, res, next) => {
 exports.getExpense = async (req,res,next)=>{
     try{
         const data = await Expense.findAll({where:{signupId:req.user.id}})
+        //const data = await Expense.findAll()
        console.log("@@@@@@@@@@@@@@@@@@@@@",data)
        console.log(data.length)
        if(data.length==0){
