@@ -30,11 +30,12 @@ app.use(PurchaseRoutes)
 app.use(ExpenseRoutes)
 app.use(signupRoutes)
 
-User.hasMany(Expense)
+User.hasMany(Expense);
 Expense.belongsTo(User)
 
-User.hasMany(Order)
+User.hasMany(Order); 
 Order.belongsTo(User)
+
 
 sequelize.sync({})
     .then(() => {

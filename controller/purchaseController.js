@@ -1,6 +1,11 @@
 const Razorpay = require('razorpay'); // Add this line to import the Razorpay library
 const Order = require('../model/ordermodel');
 
+const Expense = require('../model/ExpenseModel'); // Import your Expense model here
+const Signup = require('../model/signupModel');
+
+
+
 
 exports.purchasePremium = async (req, res,next) => {
   try {
@@ -95,5 +100,45 @@ exports.updateTransactionFailed = async(req,res,next)=>{
     return res.status(500).json({ message: "Some internal error occurred", error: error.message });
   }
 }
+
+// exports.getAllExpenses = async(req,res,next)=>{
+//   // get all the expenses group by signup id with names 
+//   // it should return obj like Name-ajay, TotalExpense-(total of his expense)
+// try{
+//   const AllExpense = await Expense.findAll();
+//  console.log("***************",AllExpense)
+//   res.status(200).json({AllExpenses:AllExpense})
+
+// }catch(error){
+//   console.log(error)
+//   res.status(500).json({ERROR:error})
+
+// }
+// };
+
+const { Sequelize, Op } = require('sequelize');
+
+exports.getAllExpenses = async (req, res, next) => {
+  try {
+    const result = await Expense.findAll({
+      attributes: [
+        [Sequelize.col('signup.name'), 'Name'], // Include the name from the signup table as 'Name'
+        [Sequelize.fn('SUM', Sequelize.col('expense')), 'TotalExpense'],
+      ],
+      include: [
+        {
+          model: Signup,
+          attributes: [], // Exclude other signup attributes
+        },
+      ],
+      group: [Sequelize.col('signup.name')], // Group by the name from signup
+    });
+
+    res.status(200).json({ AllExpenses: result });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ ERROR: error });
+  }
+};
 
 

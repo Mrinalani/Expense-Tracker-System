@@ -1,5 +1,7 @@
 //const Razorpay = require("razorpay");
 
+//const { getAllExpenses } = require("./controller/purchaseController");
+
  async function SaveExpense(event){
     event.preventDefault();
     
@@ -70,6 +72,42 @@ window.addEventListener("DOMContentLoaded", async() => {
       if(response1.data.isPremiumUser == true){
         console.log(response1.data.isPremiumUser)
         document.getElementById('rzp-button').style.display = 'none'
+        const div =  document.getElementById('divtag')
+        div.textContent = 'You are a premium user';
+        div.style.color = 'blue';
+        document.getElementById('leaderboardbutton').textContent = 'LeaderBoard';
+        const leaderbutton = document.getElementById('leaderboardbutton')
+        leaderbutton.textContent = 'LeaderBoard';
+        leaderbutton.onclick = async()=>{
+
+          const leaderboard = document.getElementById('leaderboard')
+          leaderboard.innerText = 'LEADERBOARD'
+
+          const ulist1 = document.getElementById('ulist1')
+
+           const response3 = await axios.get("http://localhost:3000/get/allExpense")
+           try{
+           if (response3.data.AllExpenses) {
+            const allExpenses = response3.data.AllExpenses;
+                 console.log("########",allExpenses)
+            ulist1.innerHTML = '';
+
+            for (let i = 0; i < allExpenses.length; i++) {
+              const expense = allExpenses[i];
+              const li = document.createElement('li');
+              li.textContent = `Name - ${expense.Name} TotalExpense - ${expense.TotalExpense}`;
+              ulist1.appendChild(li);
+            }
+        
+            // You can then use allExpenses as needed
+          } else {
+            console.log("No Data Found Yet");
+          }
+        } catch (error) {
+          console.log(error);
+        
+        }
+        }
       }
      
    const response =  await axios.get("http://localhost:3000/get-expense", { headers: { "Authorization": token } });
@@ -113,8 +151,43 @@ var options = {
 
     alert("You are a premium user now");
     const response2 =await axios.get("http://localhost:3000/remove/premium", { headers: { "Authorization": token } });
-      document.getElementById('rzp-button').style.display = 'none'
+    document.getElementById('rzp-button').style.display = 'none'
+    const div =  document.getElementById('divtag')
+    div.textContent = 'You are a premium user';
+    div.style.color = 'blue';
+    document.getElementById('leaderboardbutton').textContent = 'LeaderBoard';
+    const leaderbutton = document.getElementById('leaderboardbutton')
+    leaderbutton.textContent = 'LeaderBoard';
+    leaderbutton.onclick = async()=>{
 
+      const leaderboard = document.getElementById('leaderboard')
+      leaderboard.innerText = 'LEADERBOARD'
+
+      const ulist1 = document.getElementById('ulist1')
+
+       const response3 = await axios.get("http://localhost:3000/get/allExpense")
+       try{
+       if (response3.data.AllExpenses) {
+        const allExpenses = response3.data.AllExpenses;
+             console.log("########",allExpenses)
+        ulist1.innerHTML = '';
+
+        for (let i = 0; i < allExpenses.length; i++) {
+          const expense = allExpenses[i];
+          const li = document.createElement('li');
+          li.textContent = `Name - ${expense.Name} TotalExpense - ${expense.TotalExpense}`;
+          ulist1.appendChild(li);
+        }
+    
+        // You can then use allExpenses as needed
+      } else {
+        console.log("No Data Found Yet");
+      }
+    } catch (error) {
+      console.log(error);
+    
+    }
+    }
   }
 };
 
