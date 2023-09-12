@@ -101,20 +101,6 @@ exports.updateTransactionFailed = async(req,res,next)=>{
   }
 }
 
-// exports.getAllExpenses = async(req,res,next)=>{
-//   // get all the expenses group by signup id with names 
-//   // it should return obj like Name-ajay, TotalExpense-(total of his expense)
-// try{
-//   const AllExpense = await Expense.findAll();
-//  console.log("***************",AllExpense)
-//   res.status(200).json({AllExpenses:AllExpense})
-
-// }catch(error){
-//   console.log(error)
-//   res.status(500).json({ERROR:error})
-
-// }
-// };
 
 const { Sequelize, Op } = require('sequelize');
 
