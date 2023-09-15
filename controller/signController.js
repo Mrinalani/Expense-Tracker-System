@@ -49,8 +49,8 @@ exports.postSignup = async(req,res,next)=>{
   }
 }
 
-function generateExcessToken(id,name){
-  return jwt.sign({signupId:id,name:name},'mysecretcode')
+function generateExcessToken(id,name,ispremiumuser){
+  return jwt.sign({signupId:id,name:name,ispremiumuser},'mysecretcode')
   
 }
 
@@ -73,7 +73,7 @@ exports.postLogin = async (req, res, next) => {
          return res.status(500).json({message:"something went wrong" , Exist:false})
         }
         if(result == true){
-          return res.status(200).json({message:"user logged successfully" , Exist:true , token:generateExcessToken(user[0].id,user[0].Name)})
+          return res.status(200).json({message:"user logged successfully" , Exist:true , token:generateExcessToken(user[0].id,user[0].name,user[0].ispremiumuser)})
         }else{
           return res.status(400).json({message:"password is incorrect" , Exist:false})
         }

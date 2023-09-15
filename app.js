@@ -15,6 +15,7 @@ const sequelize = require('./util/database')
 const signupRoutes = require('./routes/signupRoutes')
 const ExpenseRoutes = require('./routes/ExpenseRoutes')
 const PurchaseRoutes = require('./routes/purchaseRoutes')
+const PremiumFeaturesRoutes = require('./routes/premiumFeaturesRoutes')
 
 var cors = require('cors')
 
@@ -26,6 +27,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(PremiumFeaturesRoutes)
 app.use(PurchaseRoutes)
 app.use(ExpenseRoutes)
 app.use(signupRoutes)

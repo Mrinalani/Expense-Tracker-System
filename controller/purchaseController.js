@@ -1,8 +1,9 @@
-const Razorpay = require('razorpay'); // Add this line to import the Razorpay library
+const Razorpay = require('razorpay'); 
 const Order = require('../model/ordermodel');
 
-const Expense = require('../model/ExpenseModel'); // Import your Expense model here
+const Expense = require('../model/ExpenseModel'); 
 const Signup = require('../model/signupModel');
+
 
 
 
@@ -45,26 +46,50 @@ exports.purchasePremium = async (req, res,next) => {
     res.status(500).json({ message: "Something went wrong", error: error.message });
   }
 };
+const jwt = require('jsonwebtoken');
+function generateExcessToken(id,name,ispremiumuser){
+  return jwt.sign({signupId:id,name:name,ispremiumuser},'mysecretcode')
+  
+}
 
 exports.updateTransactionStatus = async (req, res) => {
-  try {
-    const { payment_id, order_id } = req.body;
+  // try {
+  //   const { payment_id, order_id } = req.body;
 
-    // Find the order by order_id
-    const order = await Order.findOne({ where: { orderid: order_id } });
+  //   // Find the order by order_id
+  //   const order = await Order.findOne({ where: { orderid: order_id } });
 
-    if (!order) {
-      return res.status(404).json({ message: `Order with ID ${order_id} not found` });
-    }
+  //   if (!order) {
+  //     return res.status(404).json({ message: `Order with ID ${order_id} not found` });
+  //   }
 
-    // Update the order with payment_id and status
-    const updatedOrder = await order.update({ paymentid: payment_id, status: 'SUCCESSFUL' });
+  //   // Update the order with payment_id and status
+  //   const updatedOrder = await order.update({ paymentid: payment_id, status: 'SUCCESSFUL' });
 
-    // Update the user to indicate premium status
-    await req.user.update({ ispremiumuser: true });
+  //   // Update the user to indicate premium status
+  //   await req.user.update({ ispremiumuser: true });
 
-    return res.status(202).json({ success: true, message: "Transaction successful", updatedOrder });
-  } catch (error) {
+  //   return res.status(202).json({ success: true, message: "Transaction successful", updatedOrder });
+  // } catch (error) {
+  //   console.error(error);
+  //   return res.status(500).json({ message: "Some internal error occurred", error: error.message });
+  // }
+
+  try{
+    userid = req.user.id
+    const {payment_id,order_id} = req.body;
+    const order = await Order.findOne({orderid:order_id})
+    const promise1 = order.update({paymentid:payment_id, status:"SUCCESSFUL"})
+    const promise2 = req.user.update({ispremiumuser:true})
+
+    Promise.all([promise1,promise2]).then(()=>{
+    console.log("$$$$$$$$",req.user.ispremiumuser)
+      return res.status(202).json({success:true, message:"Transaction Successful", token:generateExcessToken(userid,req.user.name,req.user.ispremiumuser)})
+    }).catch((error)=>{
+      throw new Error(error)
+    })
+
+  }catch(error){
     console.error(error);
     return res.status(500).json({ message: "Some internal error occurred", error: error.message });
   }
@@ -102,29 +127,5 @@ exports.updateTransactionFailed = async(req,res,next)=>{
 }
 
 
-const { Sequelize, Op } = require('sequelize');
-
-exports.getAllExpenses = async (req, res, next) => {
-  try {
-    const result = await Expense.findAll({
-      attributes: [
-        [Sequelize.col('signup.name'), 'Name'], // Include the name from the signup table as 'Name'
-        [Sequelize.fn('SUM', Sequelize.col('expense')), 'TotalExpense'],
-      ],
-      include: [
-        {
-          model: Signup,
-          attributes: [], // Exclude other signup attributes
-        },
-      ],
-      group: [Sequelize.col('signup.name')], // Group by the name from signup
-    });
-
-    res.status(200).json({ AllExpenses: result });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ ERROR: error });
-  }
-};
 
 

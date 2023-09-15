@@ -13,7 +13,7 @@ router.post('/purchase/updatetransactionstatus',userauthentication.authenticate,
 
 router.post('/purchase/updatetransactionFailed',userauthentication.authenticate,PurchaseController.updateTransactionFailed)
 
-router.get('/get/allExpense',PurchaseController.getAllExpenses)
+// router.get('/get/allExpense',PurchaseController.getAllExpenses)
 
 module.exports = router  
 

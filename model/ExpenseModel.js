@@ -9,11 +9,10 @@ const Expense = sequelize.define('Expense',{
         primaryKey: true
     },
     expense: {
-        type:Sequelize.STRING
+        type:Sequelize.FLOAT
     },
     description:{
         type: Sequelize.STRING,
-        unique: true
     },
     category: {
         type:Sequelize.STRING,

@@ -1,6 +1,4 @@
-//const Razorpay = require("razorpay");
 
-//const { getAllExpenses } = require("./controller/purchaseController");
 
  async function SaveExpense(event){
     event.preventDefault();
@@ -63,51 +61,90 @@ const response2 =  await axios.get("http://localhost:3000/get-expense", { header
  
 }
 
+function showLeaderBoard(){
+  // const inputElement = document.createElement('input')
+  // inputElement.type = 'button'
+  // inputElement.value = 'Show LeaderBoard'
+  // inputElement.onclick = async()=>{
+  //   const token = localStorage.getItem('token')
+  //   const userLeaderBoardarray = await axios.get('http://localhost:3000/premium/showLeaderBoard', { headers: { "Authorization": token } })
+  //   console.log(userLeaderBoardarray)
+
+  //   var leaderBoardElement = document.getElementById('leaderboard')
+  //   leaderBoardElement.innerHTML += '<h1> Leader Board </h1>'
+  // userLeaderBoardarray.data.forEach((userDetails)=>{
+  //   leaderBoardElement.innerHTML += `<li>Name - ${userDetails.name} Total Expense - ${userDetails.total_cost}`
+  // })
+  // }
+  // document.getElementById('divtag').appendChild(inputElement)
+
+  console.log("inside showleader function")
+
+  document.getElementById('leaderboardbutton').textContent = 'LeaderBoard';
+  const leaderbutton = document.getElementById('leaderboardbutton')
+  leaderbutton.textContent = 'LeaderBoard';
+  leaderbutton.onclick = async()=>{
+
+    const leaderboard = document.getElementById('leaderboard')
+    leaderboard.innerText = 'LEADERBOARD'
+
+    const ulist1 = document.getElementById('ulist1')
+
+    const token = localStorage.getItem('token')
+
+     const response3 = await axios.get('http://localhost:3000/showLeaderBoard', { headers: { "Authorization": token } })
+     try{
+     if (response3.data.AllExpenses) {
+      const allExpenses = response3.data.AllExpenses;
+           console.log("########",allExpenses)
+      ulist1.innerHTML = '';
+
+      for (let i = 0; i < allExpenses.length; i++) {
+        const expense = allExpenses[i];
+        const li = document.createElement('li');
+        li.textContent = `Name - ${expense.name}   TotalExpense - ${expense.total_cost}`;
+        ulist1.appendChild(li);
+      }
+  
+      // You can then use allExpenses as needed
+    } else {
+      console.log("No Data Found Yet");
+    }
+  } catch (error) {
+    console.log(error);
+  
+  }
+  }
+}
+
+
+function showPremiumUserMessage(){
+  document.getElementById('rzp-button').style.display = 'none'
+    const div =  document.getElementById('divtag')
+    div.textContent = 'You are a premium user';
+    div.style.color = 'blue';
+}
+
+function parseJwt (token) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+}
+
 window.addEventListener("DOMContentLoaded", async() => {
 
     try{
       const token = localStorage.getItem('token')
-      const response1 =await axios.get("http://localhost:3000/remove/premium", { headers: { "Authorization": token } });
-      console.log(response1.data.isPremiumUser)
-      if(response1.data.isPremiumUser == true){
-        console.log(response1.data.isPremiumUser)
-        document.getElementById('rzp-button').style.display = 'none'
-        const div =  document.getElementById('divtag')
-        div.textContent = 'You are a premium user';
-        div.style.color = 'blue';
-        document.getElementById('leaderboardbutton').textContent = 'LeaderBoard';
-        const leaderbutton = document.getElementById('leaderboardbutton')
-        leaderbutton.textContent = 'LeaderBoard';
-        leaderbutton.onclick = async()=>{
-
-          const leaderboard = document.getElementById('leaderboard')
-          leaderboard.innerText = 'LEADERBOARD'
-
-          const ulist1 = document.getElementById('ulist1')
-
-           const response3 = await axios.get("http://localhost:3000/get/allExpense")
-           try{
-           if (response3.data.AllExpenses) {
-            const allExpenses = response3.data.AllExpenses;
-                 console.log("########",allExpenses)
-            ulist1.innerHTML = '';
-
-            for (let i = 0; i < allExpenses.length; i++) {
-              const expense = allExpenses[i];
-              const li = document.createElement('li');
-              li.textContent = `Name - ${expense.Name} TotalExpense - ${expense.TotalExpense}`;
-              ulist1.appendChild(li);
-            }
-        
-            // You can then use allExpenses as needed
-          } else {
-            console.log("No Data Found Yet");
-          }
-        } catch (error) {
-          console.log(error);
-        
-        }
-        }
+      const decodeToken = parseJwt(token)
+      console.log("::::::::", decodeToken)
+      const ispremiumuser = decodeToken.ispremiumuser
+      if(ispremiumuser){
+        showPremiumUserMessage()
+        showLeaderBoard()
       }
      
    const response =  await axios.get("http://localhost:3000/get-expense", { headers: { "Authorization": token } });
@@ -129,65 +166,68 @@ window.addEventListener("DOMContentLoaded", async() => {
 
     document.getElementById('rzp-button').onclick = async function(e){
       const token = localStorage.getItem('token')
-      console.log(token)
+      console.log("%%%%%",token)
     const response =  await axios.get("http://localhost:3000/purchase/premiummembership", { headers: { "Authorization": token } });
     
     console.log("response =",response)
 
 var options = {
   key: response.data.key_id,// imp 
-  amount: 2500,  // The amount should match the amount used when creating the order.
+  amount: 2500,  
   currency: "INR",
   name: "Random Company",
   description: "Premium Membership",
-  order_id: response.data.order.id,  // Make sure to extract the order ID correctly. imp
+  order_id: response.data.order.id, 
   handler: async function (response) {
-    // Handle the response when payment is successful.
+    
     console.log("success response=",response)
-    await axios.post("http://localhost:3000/purchase/updatetransactionstatus", {
+    const response2 = await axios.post("http://localhost:3000/purchase/updatetransactionstatus", {
       order_id: options.order_id,
       payment_id: response.razorpay_payment_id
     }, { headers: { "Authorization": token } });
 
+    console.log("!!!!!!!!!!!!!!!!!",response2)
+
     alert("You are a premium user now");
-    const response2 =await axios.get("http://localhost:3000/remove/premium", { headers: { "Authorization": token } });
     document.getElementById('rzp-button').style.display = 'none'
     const div =  document.getElementById('divtag')
     div.textContent = 'You are a premium user';
     div.style.color = 'blue';
-    document.getElementById('leaderboardbutton').textContent = 'LeaderBoard';
-    const leaderbutton = document.getElementById('leaderboardbutton')
-    leaderbutton.textContent = 'LeaderBoard';
-    leaderbutton.onclick = async()=>{
+    localStorage.setItem('token',response2.data.token)
+    showLeaderBoard()
+    // document.getElementById('leaderboardbutton').textContent = 'LeaderBoard';
+    // const leaderbutton = document.getElementById('leaderboardbutton')
+    // leaderbutton.textContent = 'LeaderBoard';
+    // leaderbutton.onclick = async()=>{
 
-      const leaderboard = document.getElementById('leaderboard')
-      leaderboard.innerText = 'LEADERBOARD'
+    //   const leaderboard = document.getElementById('leaderboard')
+    //   leaderboard.innerText = 'LEADERBOARD'
 
-      const ulist1 = document.getElementById('ulist1')
+    //   const ulist1 = document.getElementById('ulist1')
 
-       const response3 = await axios.get("http://localhost:3000/get/allExpense")
-       try{
-       if (response3.data.AllExpenses) {
-        const allExpenses = response3.data.AllExpenses;
-             console.log("########",allExpenses)
-        ulist1.innerHTML = '';
+    //    const response3 = await axios.get("http://localhost:3000/get/allExpense")
+    //    try{
+    //    if (response3.data.AllExpenses) {
+    //     const allExpenses = response3.data.AllExpenses;
+    //          console.log("########",allExpenses)
+    //     ulist1.innerHTML = '';
 
-        for (let i = 0; i < allExpenses.length; i++) {
-          const expense = allExpenses[i];
-          const li = document.createElement('li');
-          li.textContent = `Name - ${expense.Name} TotalExpense - ${expense.TotalExpense}`;
-          ulist1.appendChild(li);
-        }
+    //     for (let i = 0; i < allExpenses.length; i++) {
+    //       const expense = allExpenses[i];
+    //       const li = document.createElement('li');
+    //       li.textContent = `Name - ${expense.Name} TotalExpense - ${expense.TotalExpense}`;
+    //       ulist1.appendChild(li);
+    //     }
     
-        // You can then use allExpenses as needed
-      } else {
-        console.log("No Data Found Yet");
-      }
-    } catch (error) {
-      console.log(error);
+    //     // You can then use allExpenses as needed
+    //   } else {
+    //     console.log("No Data Found Yet");
+    //   }
+    // } catch (error) {
+    //   console.log(error);
     
-    }
-    }
+    // }
+   // }
   }
 };
 
