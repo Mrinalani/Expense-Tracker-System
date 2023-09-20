@@ -103,7 +103,7 @@ function showLeaderBoard(){
       for (let i = 0; i < allExpenses.length; i++) {
         const expense = allExpenses[i];
         const li = document.createElement('li');
-        li.textContent = `Name - ${expense.name}   TotalExpense - ${expense.totalExpense}`;
+        li.textContent = `Name - ${expense.Name}   TotalExpense - ${expense.totalExpense}`;
         ulist1.appendChild(li);
       }
   
