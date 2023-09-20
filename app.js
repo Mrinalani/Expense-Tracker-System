@@ -17,7 +17,8 @@ const ExpenseRoutes = require('./routes/ExpenseRoutes')
 const PurchaseRoutes = require('./routes/purchaseRoutes')
 const PremiumFeaturesRoutes = require('./routes/premiumFeaturesRoutes')
 
-var cors = require('cors')
+var cors = require('cors');
+const { truncate } = require('fs/promises');
 
 const app = express()
 

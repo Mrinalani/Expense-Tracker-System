@@ -20,6 +20,9 @@ const Signup = sequelize.define('signup',{
     },
     ispremiumuser: {
         type:Sequelize.BOOLEAN,
+    },
+    totalExpense:{
+        type:Sequelize.FLOAT
     }
 })
 

@@ -1,13 +1,25 @@
 const Expense = require('../model/ExpenseModel')
+const User = require('../model/signupModel')
 
 exports.postaddExpense = async (req,res,next)=>{
     try{
-    const expense = req.body.Expense;
+    var expense = req.body.Expense;
     console.log("ghj***",expense)
     const description = req.body.Description;
     const category = req.body.Category;
-
+    
     const data = await Expense.create( {expense:expense, description:description, category:category, signupId:req.user.id} )
+
+    expense = parseFloat(req.body.Expense)
+    const TotalExpense = parseFloat(req.user.totalExpense);
+    const updatedExpense = TotalExpense+expense
+
+    const update = await User.update( { totalExpense: updatedExpense },
+        { where: { id: req.user.id } })
+
+
+
+
     console.log(data)
     res.status(201).json({newUserDetails:data})
     }catch(error){
@@ -31,6 +43,13 @@ exports.deleteExpense = async (req, res, next) => {
     console.log("destroyedData =", data);
     const deletedItem = await data.destroy();
     res.status(201).json({ deletedData: deletedItem });
+
+           const expense = deletedItem.expense
+           const TotalExpense = req.user.totalExpense
+           const updateditem = TotalExpense-expense
+           const update = await User.update( { totalExpense: updateditem },
+            { where: { id: req.user.id } })
+
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "An error occurred while deleting the expense" });

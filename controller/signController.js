@@ -35,7 +35,7 @@ exports.postSignup = async(req,res,next)=>{
               }
   
               // Create a new user with the hashed password
-              await signup.create({ Name, Email, Password: hash });
+              await signup.create({ Name, Email, Password: hash ,totalExpense:0});
   
               res.status(201).json({ message: "Successfully created a new user" });
           });

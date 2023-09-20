@@ -20,6 +20,7 @@
     "mysql2": "^3.6.0",
     "npm": "^10.0.0",
     "razorpay": "^2.9.2",
+    "save-dev": "^0.0.1-security",
     "sequelize": "^6.32.1"
   },
   "devDependencies": {

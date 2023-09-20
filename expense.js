@@ -51,7 +51,8 @@ async function deleteUser(userid){
   console.log("id=",userid)
   
  const response =  await axios.delete(`http://localhost:3000/delete-Expense/${userid}`,{ headers: { "Authorization": token } })
- console.log(response.status)
+ console.log(">>>>>>>>>>>>>>>>>...",response)
+
 const response2 =  await axios.get("http://localhost:3000/get-expense", { headers: { "Authorization": token } })
 
  console.log("%%%%%%",response.data)
@@ -102,7 +103,7 @@ function showLeaderBoard(){
       for (let i = 0; i < allExpenses.length; i++) {
         const expense = allExpenses[i];
         const li = document.createElement('li');
-        li.textContent = `Name - ${expense.name}   TotalExpense - ${expense.total_cost}`;
+        li.textContent = `Name - ${expense.name}   TotalExpense - ${expense.totalExpense}`;
         ulist1.appendChild(li);
       }
   
