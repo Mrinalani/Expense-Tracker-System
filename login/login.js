@@ -27,5 +27,8 @@ async function Login(event){
         console.log('........error')
         document.body.innerHTML += `<div style="color:red;">Error:${err.message}</div>`
     }
+}
 
+function forgotpassword() {
+   window.location.href = "../forgotpassword/forgotform.html"
 }
