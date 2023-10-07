@@ -9,7 +9,7 @@
     const Category = event.target.category.value;
 
     const obj = {
-      Expense,
+      Expense, 
       Description,
       Category
     }
@@ -26,7 +26,7 @@
       }
       event.target.reset();
     }
-    
+    leaderboard
 
 async function ShowUserOnScreen(obj){
     const parentElement = document.getElementById('itemlist')
@@ -116,6 +116,13 @@ function showLeaderBoard(){
   
   }
   }
+
+  const download = document.getElementById('download')
+  download.textContent = 'Download' 
+  download.addEventListener('click', function() {
+    window.location.href = './download.html';
+  });
+
 }
 
 
