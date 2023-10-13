@@ -1,7 +1,5 @@
 const path = require('path');
 
-
-
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -9,6 +7,7 @@ const User = require('./model/signupModel')
 const Expense = require('./model/ExpenseModel')
 const Order = require('./model/ordermodel')
 const Forgotpassword = require('./model/forgotformModel');
+const FileURL = require('./model/fileURLModel')
 
 
 const sequelize = require('./util/database')
@@ -36,6 +35,9 @@ app.use(resetPasswordRoutes);
 app.use(ExpenseRoutes)
 app.use(signupRoutes)
 
+User.hasMany(FileURL);
+FileURL.belongsTo(User)
+
 User.hasMany(Forgotpassword);
 Forgotpassword.belongsTo(User);
 
@@ -44,6 +46,7 @@ Expense.belongsTo(User)
 
 User.hasMany(Order); 
 Order.belongsTo(User)
+
 
 
 sequelize.sync({})

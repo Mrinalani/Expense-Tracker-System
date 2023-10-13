@@ -117,13 +117,154 @@ function showLeaderBoard(){
   }
   }
 
-  const download = document.getElementById('download')
-  download.textContent = 'Download' 
-  download.addEventListener('click', function() {
-    window.location.href = './download.html';
-  });
+  // const download = document.getElementById('download')
+  // download.textContent = 'Download' 
+  // download.addEventListener('click', function() {
+  //   window.location.href = './download.html';
+  // });
 
 }
+
+function download(){
+  const token = localStorage.getItem('token')
+  axios.get('http://localhost:3000/user/download', { headers: {"Authorization" : token} })
+  .then((response) => {
+      if(response.status === 200){
+          //the bcakend is essentially sending a download link
+          //  which if we open in browser, the file would download
+          console.log(response.data.fileURL);
+
+          const obj = {
+          fileURL:response.data.fileURL
+          }
+
+
+          axios.post('http://localhost:3000/user/postFileURL',obj,{ headers: {"Authorization" : token} })
+          .then((response)=>{
+              console.log(response)
+          }).catch((err)=>{
+            console.log(err)
+          })
+
+
+          var a = document.createElement("a");
+          a.href = response.data.fileURL;
+          a.download = 'myexpense.csv';
+          a.click();
+      } else {
+          throw new Error(response.data.message)
+      }
+
+  })
+  .catch((err) => {
+      console.log(err)
+  });
+}
+
+// function GetAllDownloads(){
+//   const token = localStorage.getItem('token')
+//   axios.get('http://localhost:3000/user/listOfDownloads', { headers: {"Authorization" : token} })
+//   .then((response)=>{
+//     if(response.status ===200){
+//       //show all the list of downloads in screen
+//     }
+//     else{
+//       console.log(err)
+//     }
+//   })
+// }
+
+// function GetAllDownloads() {
+//   const token = localStorage.getItem('token');
+//   axios.get('http://localhost:3000/user/listOfDownloads', { headers: { "Authorization": token } })
+//     .then((response) => {
+//       if (response.status === 200) {
+//         // Assuming that the server returns the list of downloads as an array in response.data
+//         const downloads = response.data.retrievedData;
+//         console.log(downloads)
+
+//         // Now, you can display the list of downloads on the screen.
+//         displayDownloads(downloads);
+//       } else {
+//         console.error('Request failed with status code:', response.status);
+//         // You can add more error handling or display an error message to the user.
+//       }
+//     })
+//     .catch((error) => {
+//       console.error('An error occurred while fetching downloads:', error);
+//       // Handle any network or request-related errors.
+//       // You can display an error message to the user or retry the request.
+//     });
+// }
+
+// // Function to display the list of downloads on the screen
+// function displayDownloads(downloads) {
+//   // Assuming there is an HTML element with an id "downloads-container" to display the list
+//   const downloadsContainer = document.getElementById("downloads-container");
+
+//   // Clear the existing content if needed
+//   downloadsContainer.innerHTML = '';
+
+//   // Iterate through the downloads and create HTML elements to display them
+//   downloads.forEach((download) => {
+//     const downloadItem = document.createElement("div");
+//     downloadItem.textContent = download.name; // You need to adjust this based on your data structure.
+//     downloadsContainer.appendChild(downloadItem);
+//   });
+// }
+
+// Function to retrieve and display the list of downloads
+function GetAllDownloads() {
+  const token = localStorage.getItem('token');
+
+  // Make an HTTP GET request to your server to retrieve the list of downloads
+  axios.get('http://localhost:3000/user/listOfDownloads', { headers: { "Authorization": token } })
+    .then((response) => {
+      if (response.status === 200) {
+        // Assuming that the server returns the list of downloads as an array in response.data
+        const downloads = response.data.retrievedData;
+
+        // Now, you can display the list of downloads on the screen.
+        displayDownloads(downloads);
+      } else {
+        console.error('Request failed with status code:', response.status);
+        // You can add more error handling or display an error message to the user.
+      }
+    })
+    .catch((error) => {
+      console.error('An error occurred while fetching downloads:', error);
+      // Handle any network or request-related errors.
+      // You can display an error message to the user or retry the request.
+    });
+}
+
+// Function to display the list of downloads on the screen
+// Function to display the list of downloads on the screen
+function displayDownloads(downloads) {
+  // Assuming there is an HTML element with an id "downloads-container" to display the list
+  const downloadsContainer = document.getElementById("downloads-container");
+
+  // Clear the existing content if needed
+  downloadsContainer.innerHTML = '';
+
+  // Iterate through the downloads and create links with download dates
+  downloads.forEach((download) => {
+    const downloadItem = document.createElement("div");
+    const downloadLink = document.createElement("a");
+    
+    // Set the download link's attributes
+    downloadLink.textContent = `File Downloaded on: ${download.createdAt}`;
+    downloadLink.href = download.fileURL;
+    downloadLink.target = "_blank"; // Opens the link in a new tab
+
+    // Append the download link to the container
+    downloadItem.appendChild(downloadLink);
+    downloadsContainer.appendChild(downloadItem);
+  });
+}
+
+
+
 
 
 function showPremiumUserMessage(){

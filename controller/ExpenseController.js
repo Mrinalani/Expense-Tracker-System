@@ -1,7 +1,41 @@
+const { json } = require('body-parser');
 const Expense = require('../model/ExpenseModel')
 const User = require('../model/signupModel')
+const UserServices = require('../services/userservices')
 const sequelize = require('../util/database');
+const S3Services = require('../services/s3services')
+const FileURL = require('../model/fileURLModel')
 
+
+exports.downloadexpense = async (req, res, next) => {
+  try {
+    const userid= req.user.id
+    const expenses = await UserServices.getExpenses(req);
+    console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',req.user)
+    const stringfiedexpenses = JSON.stringify(expenses);
+    const filename = `Expense${userid}/${new Date}.txt`;
+
+    const fileURL = await S3Services.uploadToS3(stringfiedexpenses, filename)
+      console.log(fileURL)
+        res.status(200).json({ fileURL, success: true });
+  } catch (err) {
+    console.log(err);
+    // Handle other errors that might occur during expenses retrieval
+    res.status(500).json({ success: false, message: err.message || 'An error occurred' });
+  }
+};
+
+exports.getListOfDownloads = async (req,res,next)=>{
+  const data = await FileURL.findAll({where:{signupId:req.user.id}})
+  console.log(data)
+  res.status(200).json({retrievedData:data})
+}
+
+exports.postFileURL = async(req,res,next)=>{
+  const URL = req.body.fileURL;
+  const data = await FileURL.create( {fileURL:URL,signupId:req.user.id})
+  res.status(200).json({retrievedData:data})
+}
 
 exports.postaddExpense = async (req,res,next)=>{
     try{
