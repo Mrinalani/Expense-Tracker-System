@@ -110,19 +110,47 @@ exports.deleteExpense = async (req, res, next) => {
 };
 
 exports.getExpense = async (req,res,next)=>{
-    try{
-        const data = await Expense.findAll({where:{signupId:req.user.id}})
-        //const data = await Expense.findAll()
-       console.log("@@@@@@@@@@@@@@@@@@@@@",data)
-       console.log(data.length)
-       if(data.length==0){
-        res.status(202).json({message:false})
-       }else{
-        res.status(201).json({retrievedData:data})
-       }
-        }catch(error){
-            res.status(500).json({
-                error:error
-            })
+   // try{
+      //   const data = await Expense.findAll({where:{signupId:req.user.id}})
+      //   //const data = await Expense.findAll()
+      //  console.log("@@@@@@@@@@@@@@@@@@@@@",data)
+      //  console.log(data.length)
+      //  if(data.length==0){
+      //   res.status(202).json({message:false})
+      //  }else{
+      //   res.status(201).json({retrievedData:data})
+      //  }
+      //   }catch(error){
+      //       res.status(500).json({
+      //           error:error
+      //       })
+      //   }
+     }
+
+     exports.getPagination = async (req, res, next) => {
+      try {
+        const page = req.query.page || 1;
+        const itemsPerPage = 5;
+    
+        const offset = (page - 1) * itemsPerPage;
+    
+        const data = await Expense.findAndCountAll({
+          where: { signupId: req.user.id },
+          offset,
+          limit: itemsPerPage,
+        });
+       
+        if (data.count === 0) {
+          res.status(202).json({ message: false });
+        } else {
+          res.status(201).json({
+            retrievedData: data.rows,
+            totalCount: data.count,
+            currentPage: page, // Include the current page number
+          });
         }
-    }
+      } catch (error) {
+        res.status(500).json({ error: error });
+      }
+    };
+    

@@ -31,7 +31,7 @@
 async function ShowUserOnScreen(obj){
     const parentElement = document.getElementById('itemlist')
     const children = document.createElement('li');
-    children.textContent = obj.expense+"-"+obj.description+"-"+obj.category
+    children.textContent = ` RECENT EXPENCE => ${obj.expense}-${obj.description}-${obj.category}`
 
     const deletebutton = document.createElement('input');
     deletebutton.type = "button";
@@ -55,7 +55,7 @@ async function deleteUser(userid){
 
 const response2 =  await axios.get("http://localhost:3000/get-expense", { headers: { "Authorization": token } })
 
- console.log("%%%%%%",response.data)
+ console.log("%%%%%%",response2.data)
   }catch(error){
     console.log(error)
   }
@@ -63,22 +63,7 @@ const response2 =  await axios.get("http://localhost:3000/get-expense", { header
 }
 
 function showLeaderBoard(){
-  // const inputElement = document.createElement('input')
-  // inputElement.type = 'button'
-  // inputElement.value = 'Show LeaderBoard'
-  // inputElement.onclick = async()=>{
-  //   const token = localStorage.getItem('token')
-  //   const userLeaderBoardarray = await axios.get('http://localhost:3000/premium/showLeaderBoard', { headers: { "Authorization": token } })
-  //   console.log(userLeaderBoardarray)
-
-  //   var leaderBoardElement = document.getElementById('leaderboard')
-  //   leaderBoardElement.innerHTML += '<h1> Leader Board </h1>'
-  // userLeaderBoardarray.data.forEach((userDetails)=>{
-  //   leaderBoardElement.innerHTML += `<li>Name - ${userDetails.name} Total Expense - ${userDetails.total_cost}`
-  // })
-  // }
-  // document.getElementById('divtag').appendChild(inputElement)
-
+ 
   console.log("inside showleader function")
 
   document.getElementById('leaderboardbutton').textContent = 'LeaderBoard';
@@ -107,7 +92,6 @@ function showLeaderBoard(){
         ulist1.appendChild(li);
       }
   
-      // You can then use allExpenses as needed
     } else {
       console.log("No Data Found Yet");
     }
@@ -117,12 +101,6 @@ function showLeaderBoard(){
   }
   }
 
-  // const download = document.getElementById('download')
-  // download.textContent = 'Download' 
-  // download.addEventListener('click', function() {
-  //   window.location.href = './download.html';
-  // });
-
 }
 
 function download(){
@@ -130,8 +108,6 @@ function download(){
   axios.get('http://localhost:3000/user/download', { headers: {"Authorization" : token} })
   .then((response) => {
       if(response.status === 200){
-          //the bcakend is essentially sending a download link
-          //  which if we open in browser, the file would download
           console.log(response.data.fileURL);
 
           const obj = {
@@ -161,90 +137,27 @@ function download(){
   });
 }
 
-// function GetAllDownloads(){
-//   const token = localStorage.getItem('token')
-//   axios.get('http://localhost:3000/user/listOfDownloads', { headers: {"Authorization" : token} })
-//   .then((response)=>{
-//     if(response.status ===200){
-//       //show all the list of downloads in screen
-//     }
-//     else{
-//       console.log(err)
-//     }
-//   })
-// }
-
-// function GetAllDownloads() {
-//   const token = localStorage.getItem('token');
-//   axios.get('http://localhost:3000/user/listOfDownloads', { headers: { "Authorization": token } })
-//     .then((response) => {
-//       if (response.status === 200) {
-//         // Assuming that the server returns the list of downloads as an array in response.data
-//         const downloads = response.data.retrievedData;
-//         console.log(downloads)
-
-//         // Now, you can display the list of downloads on the screen.
-//         displayDownloads(downloads);
-//       } else {
-//         console.error('Request failed with status code:', response.status);
-//         // You can add more error handling or display an error message to the user.
-//       }
-//     })
-//     .catch((error) => {
-//       console.error('An error occurred while fetching downloads:', error);
-//       // Handle any network or request-related errors.
-//       // You can display an error message to the user or retry the request.
-//     });
-// }
-
-// // Function to display the list of downloads on the screen
-// function displayDownloads(downloads) {
-//   // Assuming there is an HTML element with an id "downloads-container" to display the list
-//   const downloadsContainer = document.getElementById("downloads-container");
-
-//   // Clear the existing content if needed
-//   downloadsContainer.innerHTML = '';
-
-//   // Iterate through the downloads and create HTML elements to display them
-//   downloads.forEach((download) => {
-//     const downloadItem = document.createElement("div");
-//     downloadItem.textContent = download.name; // You need to adjust this based on your data structure.
-//     downloadsContainer.appendChild(downloadItem);
-//   });
-// }
-
-// Function to retrieve and display the list of downloads
 function GetAllDownloads() {
   const token = localStorage.getItem('token');
 
-  // Make an HTTP GET request to your server to retrieve the list of downloads
   axios.get('http://localhost:3000/user/listOfDownloads', { headers: { "Authorization": token } })
     .then((response) => {
       if (response.status === 200) {
-        // Assuming that the server returns the list of downloads as an array in response.data
         const downloads = response.data.retrievedData;
 
-        // Now, you can display the list of downloads on the screen.
         displayDownloads(downloads);
       } else {
         console.error('Request failed with status code:', response.status);
-        // You can add more error handling or display an error message to the user.
       }
     })
     .catch((error) => {
       console.error('An error occurred while fetching downloads:', error);
-      // Handle any network or request-related errors.
-      // You can display an error message to the user or retry the request.
     });
 }
 
-// Function to display the list of downloads on the screen
-// Function to display the list of downloads on the screen
-function displayDownloads(downloads) {
-  // Assuming there is an HTML element with an id "downloads-container" to display the list
-  const downloadsContainer = document.getElementById("downloads-container");
 
-  // Clear the existing content if needed
+function displayDownloads(downloads) {
+  const downloadsContainer = document.getElementById("downloads-container");
   downloadsContainer.innerHTML = '';
 
   // Iterate through the downloads and create links with download dates
@@ -284,6 +197,7 @@ function parseJwt (token) {
   return JSON.parse(jsonPayload);
 }
 
+
 window.addEventListener("DOMContentLoaded", async() => {
 
     try{
@@ -304,7 +218,7 @@ window.addEventListener("DOMContentLoaded", async() => {
    else{
         for (var i = 0; i < response.data.retrievedData.length; i++) {
           const obj = response.data.retrievedData[i];
-          ShowUserOnScreen(obj);
+         // ShowUserOnScreen(obj);
         }
       }
     }catch(error){
@@ -344,39 +258,7 @@ var options = {
     div.style.color = 'blue';
     localStorage.setItem('token',response2.data.token)
     showLeaderBoard()
-    // document.getElementById('leaderboardbutton').textContent = 'LeaderBoard';
-    // const leaderbutton = document.getElementById('leaderboardbutton')
-    // leaderbutton.textContent = 'LeaderBoard';
-    // leaderbutton.onclick = async()=>{
-
-    //   const leaderboard = document.getElementById('leaderboard')
-    //   leaderboard.innerText = 'LEADERBOARD'
-
-    //   const ulist1 = document.getElementById('ulist1')
-
-    //    const response3 = await axios.get("http://localhost:3000/get/allExpense")
-    //    try{
-    //    if (response3.data.AllExpenses) {
-    //     const allExpenses = response3.data.AllExpenses;
-    //          console.log("########",allExpenses)
-    //     ulist1.innerHTML = '';
-
-    //     for (let i = 0; i < allExpenses.length; i++) {
-    //       const expense = allExpenses[i];
-    //       const li = document.createElement('li');
-    //       li.textContent = `Name - ${expense.Name} TotalExpense - ${expense.TotalExpense}`;
-    //       ulist1.appendChild(li);
-    //     }
-    
-    //     // You can then use allExpenses as needed
-    //   } else {
-    //     console.log("No Data Found Yet");
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    
-    // }
-   // }
+   
   }
 };
 
@@ -394,3 +276,89 @@ var options = {
     })
     }
 
+
+// Add event listeners for pagination buttons
+document.getElementById('firstPageButton').addEventListener('click', () => changePage(1));
+document.getElementById('prevPageButton').addEventListener('click', () => {
+  changePage(currentPage - 1)
+  console.log('currentPage P', currentPage)
+});
+document.getElementById('nextPageButton').addEventListener('click', () => {
+  changePage(currentPage + 1)
+  console.log('currentPage N', currentPage)
+});
+document.getElementById('lastPageButton').addEventListener('click', () => changePage(totalPages)); // Change this line
+
+// Initialize currentPage and totalPages
+let currentPage = 1;
+let totalPages = 1;
+
+// Function to update the page
+function changePage(newPage) {
+  if (newPage < 1 || newPage > totalPages) return;
+
+  // Update the current page and make a request to the server with the new page
+  currentPage = newPage;
+  if (currentPage === totalPages) {
+      // For the "Last" button, make the request with the maximum page value
+      updateExpenseTable(totalPages);
+  } else {
+      updateExpenseTable(currentPage);
+  }
+}
+
+let itemsPerPage = 5;
+
+async function updateExpenseTable(page) {
+  try {
+    const token = localStorage.getItem('token');
+    console.log ('page=',page)
+    const response = await axios.get(`http://localhost:3000/get-pagination?page=${page}`, { headers: { "Authorization": token } });
+    const data = response.data;
+
+    const itemlist = document.getElementById('itemlist');
+    itemlist.innerHTML = ''; // Clear the existing content
+
+    if(data.message == false){
+       console.log('length is zero')
+    }else{
+    if (data.retrievedData.length > 0) {
+      const currentPage = data.currentPage;
+      const firstItemNumber = (currentPage - 1) * itemsPerPage + 1;
+
+      data.retrievedData.forEach((expense, index) => {
+        const li = document.createElement('li');
+        const itemNumber = firstItemNumber + index;
+        li.textContent = `${itemNumber}. ${expense.description} - ${expense.category} - ${expense.expense}`;
+
+        const deletebutton = document.createElement('input');
+        deletebutton.type = "button";
+        deletebutton.value = 'delete';
+        deletebutton.onclick = async () => {
+          console.log(expense.id);
+          deleteUser(expense.id);
+          itemlist.removeChild(li); 
+        };
+        
+        li.appendChild(deletebutton);
+        itemlist.appendChild(li);
+        
+      });
+    }
+  }
+  
+
+    // Update the total pages
+    totalPages = Math.ceil(data.totalCount / itemsPerPage);
+
+    // Enable/disable pagination buttons based on the current page and total pages
+    document.getElementById('firstPageButton').disabled = page === 1;
+    document.getElementById('prevPageButton').disabled = page === 1;
+    document.getElementById('nextPageButton').disabled = page === totalPages;
+    document.getElementById('lastPageButton').disabled = page === totalPages;
+  } catch (error) {
+    console.error('An error occurred:', error);
+  }
+}
+
+updateExpenseTable(1);
