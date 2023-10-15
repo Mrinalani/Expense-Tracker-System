@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Expense</title>
+
+    <style>
+        /* CSS for highlighting the current page */
+        .current-page {
+          background-color: #007bff; /* You can use your desired color here */
+          color: #fff;
+          padding: 5px 10px;
+          border-radius: 5px;
+        }
+      </style>
+      
 </head>
 <body>
 <form action="" onsubmit="SaveExpense(event)">
@@ -42,9 +53,19 @@
 <div id="pagination">
     <button id="firstPageButton" disabled>&lt;&lt; First</button>
     <button id="prevPageButton" disabled>&lt; Previous</button>
+    <div id="paginationNumbers" style="display: inline-block;"></div>
     <button id="nextPageButton">Next &gt;</button>
     <button id="lastPageButton">Last &gt;&gt;</button>
+<label for="expensesPerPage">Expenses per Page:</label>
+<select id="expensesPerPage">
+    <option value="1">1</option>
+    <option value="3">3</option>
+    <option value="5">5</option>
+    <option value="7">7</option>
+    <option value="50">10</option>
+</select>
 </div>
+
 <br> <br> 
 <div id="downloads-container"></div>
 

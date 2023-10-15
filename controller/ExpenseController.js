@@ -129,28 +129,37 @@ exports.getExpense = async (req,res,next)=>{
 
      exports.getPagination = async (req, res, next) => {
       try {
-        const page = req.query.page || 1;
-        const itemsPerPage = 5;
-    
-        const offset = (page - 1) * itemsPerPage;
-    
-        const data = await Expense.findAndCountAll({
-          where: { signupId: req.user.id },
-          offset,
-          limit: itemsPerPage,
-        });
-       
-        if (data.count === 0) {
-          res.status(202).json({ message: false });
-        } else {
-          res.status(201).json({
-            retrievedData: data.rows,
-            totalCount: data.count,
-            currentPage: page, // Include the current page number
+          const page = parseInt(req.query.page) || 1;
+          let expensesPerPage = parseInt(req.query.itemsPerPage) || 5;
+  
+          // Handle invalid expensesPerPage
+          if (isNaN(expensesPerPage) || expensesPerPage < 1) {
+              console.log('Invalid expensesPerPage. Using default value.');
+              expensesPerPage = 5; // Set a default value
+          }
+  
+          console.log('Page:', page);
+          console.log('Expenses Per Page:', expensesPerPage);
+  
+          const offset = (page - 1) * expensesPerPage
+          const data = await Expense.findAndCountAll({
+              where: { signupId: req.user.id },
+              offset,
+              limit: expensesPerPage,
           });
-        }
+  
+          if (data.count === 0) {
+              res.status(202).json({ message: false });
+          } else {
+              res.status(201).json({
+                  retrievedData: data.rows,
+                  totalCount: data.count,
+                  currentPage: page,
+              });
+          }
       } catch (error) {
-        res.status(500).json({ error: error });
+          res.status(500).json({ error: error.message });
+          console.error(error);
       }
-    };
-    
+  };
+  

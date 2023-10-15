@@ -289,7 +289,6 @@ document.getElementById('nextPageButton').addEventListener('click', () => {
 });
 document.getElementById('lastPageButton').addEventListener('click', () => changePage(totalPages)); // Change this line
 
-// Initialize currentPage and totalPages
 let currentPage = 1;
 let totalPages = 1;
 
@@ -300,65 +299,102 @@ function changePage(newPage) {
   // Update the current page and make a request to the server with the new page
   currentPage = newPage;
   if (currentPage === totalPages) {
-      // For the "Last" button, make the request with the maximum page value
-      updateExpenseTable(totalPages);
+    // For the "Last" button, make the request with the maximum page value
+    updateExpenseTable(totalPages);
   } else {
-      updateExpenseTable(currentPage);
+    updateExpenseTable(currentPage);
   }
 }
 
-let itemsPerPage = 5;
 
+// Function to update the table based on the page
 async function updateExpenseTable(page) {
-  try {
-    const token = localStorage.getItem('token');
-    console.log ('page=',page)
-    const response = await axios.get(`http://localhost:3000/get-pagination?page=${page}`, { headers: { "Authorization": token } });
-    const data = response.data;
+  const itemsPerPage = parseInt(localStorage.getItem('expensesPerPage')) || 5;
+ 
+  console.log('hitemperpage = ',itemsPerPage)
+    try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`http://localhost:3000/get-pagination?page=${page}&itemsPerPage=${itemsPerPage}`, { headers: { "Authorization": token } });
+        const data = response.data;
 
-    const itemlist = document.getElementById('itemlist');
-    itemlist.innerHTML = ''; // Clear the existing content
+        // Clear the existing content
+        const itemlist = document.getElementById('itemlist');
+        itemlist.innerHTML = '';
 
-    if(data.message == false){
-       console.log('length is zero')
-    }else{
-    if (data.retrievedData.length > 0) {
-      const currentPage = data.currentPage;
-      const firstItemNumber = (currentPage - 1) * itemsPerPage + 1;
+        if (data.message == false) {
+            console.log('length is zero');
+        } else {
+            if (data.retrievedData.length > 0) {
+                const currentPage = data.currentPage;
+                const firstItemNumber = (currentPage - 1) * itemsPerPage + 1;
 
-      data.retrievedData.forEach((expense, index) => {
-        const li = document.createElement('li');
-        const itemNumber = firstItemNumber + index;
-        li.textContent = `${itemNumber}. ${expense.description} - ${expense.category} - ${expense.expense}`;
+                data.retrievedData.forEach((expense, index) => {
+                    const li = document.createElement('li');
+                    const itemNumber = firstItemNumber + index;
+                    li.textContent = `${itemNumber}. ${expense.description} - ${expense.category} - ${expense.expense}`;
 
-        const deletebutton = document.createElement('input');
-        deletebutton.type = "button";
-        deletebutton.value = 'delete';
-        deletebutton.onclick = async () => {
-          console.log(expense.id);
-          deleteUser(expense.id);
-          itemlist.removeChild(li); 
-        };
+                    const deletebutton = document.createElement('input');
+                    deletebutton.type = "button";
+                    deletebutton.value = 'delete';
+                    deletebutton.onclick = async () => {
+                        console.log(expense.id);
+                        deleteUser(expense.id);
+                        itemlist.removeChild(li);
+                    };
+
+                    li.appendChild(deletebutton);
+                    itemlist.appendChild(li);
+                });
+            }
+        }
+
+        // Update the total pages
+        totalPages = Math.ceil(data.totalCount / itemsPerPage)
+
         
-        li.appendChild(deletebutton);
-        itemlist.appendChild(li);
+            // Enable/disable pagination buttons based on the current page and total pages
+            document.getElementById('firstPageButton').disabled = page === 1;
+            document.getElementById('prevPageButton').disabled = page === 1;
+            document.getElementById('nextPageButton').disabled = page === totalPages;
+            document.getElementById('lastPageButton').disabled = page === totalPages;
         
-      });
-    }
-  }
-  
+            // Display a limited number of page buttons
+            const paginationNumbers = document.getElementById('paginationNumbers');
+            paginationNumbers.innerHTML = ''; // Clear the existing content
+            const maxDisplayedPages = 3; // Number of page buttons to display
+        
+            let startPage = Math.max(1, page - Math.floor(maxDisplayedPages / 2));
+            let endPage = Math.min(totalPages, startPage + maxDisplayedPages - 1);
+            if (endPage - startPage < maxDisplayedPages - 1) {
+              startPage = Math.max(1, endPage - maxDisplayedPages + 1);
+            }
+         
+            for (let i = startPage; i <= endPage; i++) {
+              const button = document.createElement('button');
+              button.textContent = i;
+        
+              if (i === page) {
+                button.classList.add('current-page'); // Highlight the current page
+              }
+        
+              button.addEventListener('click', () => changePage(i));
+              paginationNumbers.appendChild(button);
+            }
+          } catch (error) {
+            console.error('An error occurred:', error);
+          }
+        }
+        
+updateExpenseTable(1);
 
-    // Update the total pages
-    totalPages = Math.ceil(data.totalCount / itemsPerPage);
+const expensesPerPageSelect = document.getElementById('expensesPerPage');
 
-    // Enable/disable pagination buttons based on the current page and total pages
-    document.getElementById('firstPageButton').disabled = page === 1;
-    document.getElementById('prevPageButton').disabled = page === 1;
-    document.getElementById('nextPageButton').disabled = page === totalPages;
-    document.getElementById('lastPageButton').disabled = page === totalPages;
-  } catch (error) {
-    console.error('An error occurred:', error);
-  }
+if (expensesPerPageSelect) {
+  expensesPerPageSelect.addEventListener('change', function () {
+    const selectedValue = expensesPerPageSelect.value;
+    console.log(selectedValue)
+    localStorage.setItem('expensesPerPage', selectedValue);
+    changePage(1);
+  });
 }
 
-updateExpenseTable(1);
