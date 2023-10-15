@@ -1,7 +1,11 @@
 const path = require('path');
+const fs = require('fs')
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const helmet = require('helmet')
+const compression = require('compression')
+const morgan = require('morgan')
 
 const User = require('./model/signupModel')
 const Expense = require('./model/ExpenseModel')
@@ -23,8 +27,15 @@ const { truncate } = require('fs/promises');
 
 const app = express()
 
+const accessLogStream = fs.createWriteStream(
+    path.join(__dirname, 'access.log'),
+    {flags: 'a'}
+)
 
 app.use(cors());
+app.use(helmet())
+app.use(compression())
+app.use(morgan('combined',{ stream: accessLogStream}))
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

@@ -11,8 +11,8 @@ const Signup = require('../model/signupModel');
 exports.purchasePremium = async (req, res,next) => {
   try {
     // Retrieve your Razorpay API key and secret from environment variables
-    const key_id = 'rzp_test_Nn5XluV0MKDoj8';
-    const key_secret = 'kSUrMTn3X0dbnwNsnIrn7q2z';
+    const key_id = process.env.RAZORPAY_KEY_ID;
+    const key_secret = process.env.RAZORPAY_KEY_SECRET;
     ;
     // initialize rzp obj  which is instance of razorpay class
     const rzp = new Razorpay({
