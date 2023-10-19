@@ -68,7 +68,7 @@ function showLeaderBoard(){
 
   document.getElementById('leaderboardbutton').textContent = 'LeaderBoard';
   const leaderbutton = document.getElementById('leaderboardbutton')
-  leaderbutton.textContent = 'LeaderBoard';
+  leaderbutton.textContent = 'Show LeaderBoard';
   leaderbutton.onclick = async()=>{
 
     const leaderboard = document.getElementById('leaderboard')
