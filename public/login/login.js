@@ -11,7 +11,7 @@ async function Login(event){
 
   }
      /// which req should we made to check if login detail email exist or not
-     const response =  await axios.post(`http://localhost:3000/check-email-exists`, loginDetails)
+     const response =  await axios.post(`http://51.20.41.30:3000/check-email-exists`, loginDetails)
         console.log("data::::" ,response.data)
 
      if(response.data.Exist == true){
@@ -20,7 +20,7 @@ async function Login(event){
 
         localStorage.setItem('token',response.data.token)
 
-        window.location.href = '../expense.html';
+        window.location.href = '../Expense/expense.html';
      }
       
     }catch(err){

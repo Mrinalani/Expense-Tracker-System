@@ -48,6 +48,23 @@ app.use(resetPasswordRoutes);
 app.use(ExpenseRoutes)
 app.use(signupRoutes)
 
+app.use((req, res, next) => {
+    res.setHeader("Content-Security-Policy", "script-src 'self' https://cdnjs.cloudflare.com");
+    return next();
+});
+
+  
+
+app.use((req, res) => {
+    console.log('urlll', req.url);
+    //res.sendFile(path.join(__dirname, 'public/login/login.html'));
+   res.sendFile(path.join(__dirname, `public/${req.url}`));
+
+});
+
+
+
+
 User.hasMany(FileURL);
 FileURL.belongsTo(User)
 
@@ -65,7 +82,7 @@ Order.belongsTo(User)
 sequelize.sync({})
     .then(() => {
         console.log('Database and tables synced');
-        app.listen(3000)
+        app.listen(3003)
     })
     .catch((err) => {
         console.error('Error syncing database:', err);

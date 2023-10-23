@@ -12,15 +12,16 @@ async function signUp(event){
         Password
     }
 
-    const response = await axios.post("http://localhost:3000/user/signup",signupDetail)
+    const response = await axios.post("http://51.20.41.30:3000/user/signup",signupDetail)
     if(response.status === 201){
-        window.location.href = "./login/login.html"
+        window.location.href = "../login/login.html"
        console.log('get request successfull')
     }else{
         throw new Error('failed to login');
     }
     }catch(err){
         console.log('........error')
+        console.log(err)
         document.body.innerHTML += `<div style="color:red;">Error:${err.message}</div>`
     }
 
