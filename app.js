@@ -48,16 +48,15 @@ app.use(resetPasswordRoutes);
 app.use(ExpenseRoutes)
 app.use(signupRoutes)
 
-app.use((req, res, next) => {
-    res.setHeader("Content-Security-Policy", "script-src 'self' https://cdnjs.cloudflare.com");
-    return next();
-});
+// app.use((req, res, next) => {
+//     res.setHeader("Content-Security-Policy", "script-src 'self' https://cdnjs.cloudflare.com");
+//     return next();
+// });
 
   
 
 app.use((req, res) => {
     console.log('urlll', req.url);
-    console.log('req has arrived and it is about to complete')
     res.sendFile(path.join(__dirname, 'public/login/login.html'));
     console.log("random url")
    //res.sendFile(path.join(__dirname, `public/${req.url}`));
