@@ -55,13 +55,14 @@ app.use((req, res, next) => {
 
   
 
-// app.use((req, res) => {
-//     console.log('urlll', req.url);
-//     //res.sendFile(path.join(__dirname, 'public/login/login.html'));
-//     console.log("random url")
-//    res.sendFile(path.join(__dirname, `public/${req.url}`));
+app.use((req, res) => {
+    console.log('urlll', req.url);
+    console.log('req has arrived and it is about to complete')
+    res.sendFile(path.join(__dirname, 'public/login/login.html'));
+    console.log("random url")
+   //res.sendFile(path.join(__dirname, `public/${req.url}`));
 
-// });
+});
 
 
 
