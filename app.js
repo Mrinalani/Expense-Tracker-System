@@ -83,7 +83,7 @@ Order.belongsTo(User)
 sequelize.sync({})
     .then(() => {
         console.log('Database and tables synced');
-        app.listen(3003)
+        app.listen(3000)
     })
     .catch((err) => {
         console.error('Error syncing database:', err);
