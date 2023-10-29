@@ -48,10 +48,10 @@ app.use(resetPasswordRoutes);
 app.use(ExpenseRoutes)
 app.use(signupRoutes)
 
-app.use((req, res, next) => {
-    res.setHeader("Content-Security-Policy", "script-src 'self' https://cdnjs.cloudflare.com");
-    return next();
-});
+// app.use((req, res, next) => {
+//     res.setHeader("Content-Security-Policy", "script-src 'self' https://cdnjs.cloudflare.com");
+//     return next();
+//});
 app.use((req, res) => {
     console.log('urlll', req.url);
     res.sendFile(path.join(__dirname, 'public/login/login.html'));
