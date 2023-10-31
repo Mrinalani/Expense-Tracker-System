@@ -11,6 +11,8 @@ async function Login(event){
 
   }
      /// which req should we made to check if login detail email exist or not
+
+     console.log("Login Details:", loginDetails);
      const response =  await axios.post(`http://51.20.41.30:3000/check-email-exists`, loginDetails)
         console.log("data::::" ,response.data)
 

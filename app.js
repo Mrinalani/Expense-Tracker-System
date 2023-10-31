@@ -48,19 +48,38 @@ app.use(resetPasswordRoutes);
 app.use(ExpenseRoutes)
 app.use(signupRoutes)
 
-// app.use((req, res, next) => {
-//     res.setHeader("Content-Security-Policy", "script-src 'self' https://cdnjs.cloudflare.com");
-//     return next();
-//});
-// app.use((req, res) => {
-//     console.log('urlll', req.url);
-//     res.sendFile(path.join(__dirname, 'public/login/login.html'));
-//     console.log("random url")
-//    //res.sendFile(path.join(__dirname, `public/${req.url}`));
+app.use((req, res, next) => {
+    res.setHeader("Content-Security-Policy", "script-src 'self' https://cdnjs.cloudflare.com");
+    return next();
+});
 
+app.use((req, res, next) => {
+    res.setHeader("Content-Security-Policy", "script-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline'");
+    return next();
+});
+
+  app.use((req, res) => {
+//      console.log('urlll', req.url);
+   // res.sendFile(path.join(__dirname, `public/login/login.html`));
+     res.sendFile(path.join(__dirname, `public/${req.url}`));
+
+  });
+
+//app.use(express.static(path.join(__dirname, 'public')));
+
+// Define a dynamic route to serve files based on the route
+// app.get('/login/:fileName', (req, res) => {
+//     const fileName = req.params.fileName;
+//     const filePath = path.join(__dirname, 'public', 'login', fileName);
+
+//     // Check if the file exists, and if it does, send it
+//     res.sendFile(filePath, (err) => {
+//         if (err) {
+//             // Handle errors, e.g., file not found
+//             res.status(404).send('File not found');
+//         }
+//     });
 // });
-
-
 
 
 User.hasMany(FileURL);
