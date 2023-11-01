@@ -10,9 +10,9 @@
   "author": "Mrinalani Pandey",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.433.0",
-    "@azure/storage-blob": "^12.0.0",
-    "aws-sdk": "^2.1472.0",
+    "@aws-sdk/client-s3": "^3.440.0",
+    "@azure/storage-blob": "^12.16.0",
+    "aws-sdk": "^2.1485.0",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "compression": "^1.7.4",
@@ -22,15 +22,15 @@
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "mysql2": "^3.6.0",
-    "nodemailer": "^6.9.5",
-    "npm": "^10.0.0",
+    "mysql2": "^3.6.2",
+    "nodemailer": "^6.9.7",
+    "npm": "^10.2.2",
     "razorpay": "^2.9.2",
     "save-dev": "^0.0.1-security",
     "sendinblue-api": "^1.0.8",
-    "sequelize": "^6.32.1",
+    "sequelize": "^6.33.0",
     "sib-api-v3-sdk": "^8.5.0",
-    "uuid": "^8.3.2"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "dotenv": "^16.3.1",

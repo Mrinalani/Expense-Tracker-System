@@ -12,7 +12,7 @@ async function signUp(event){
         Password
     }
 
-    const response = await axios.post("http://51.20.41.30:3000/user/signup",signupDetail)
+    const response = await axios.post("http://13.53.131.225:3000/user/signup",signupDetail)
     if(response.status === 201){
         window.location.href = "../login/login.html"
        console.log('get request successfull')

@@ -17,7 +17,7 @@
       
     try {
       const token = localStorage.getItem('token')
-      const response = await axios.post("http://51.20.41.30:3000/add-expense", obj,{ headers: { "Authorization": token } });
+      const response = await axios.post("http://13.53.131.225:3000/add-expense", obj,{ headers: { "Authorization": token } });
             console.log(response)
           ShowUserOnScreen(response.data.newUserDetails);
     
@@ -50,10 +50,10 @@ async function deleteUser(userid){
     const token = localStorage.getItem('token')
   console.log("id=",userid)
   
- const response =  await axios.delete(`http://51.20.41.30:3000/delete-Expense/${userid}`,{ headers: { "Authorization": token } })
+ const response =  await axios.delete(`http://13.53.131.225:3000/delete-Expense/${userid}`,{ headers: { "Authorization": token } })
  console.log(">>>>>>>>>>>>>>>>>...",response)
 
-const response2 =  await axios.get("http://51.20.41.30:3000/get-expense", { headers: { "Authorization": token } })
+const response2 =  await axios.get("http://13.53.131.225:3000/get-expense", { headers: { "Authorization": token } })
 
  console.log("%%%%%%",response2.data)
   }catch(error){
@@ -78,7 +78,7 @@ function showLeaderBoard(){
 
     const token = localStorage.getItem('token')
 
-     const response3 = await axios.get('http://51.20.41.30:3000/showLeaderBoard', { headers: { "Authorization": token } })
+     const response3 = await axios.get('http://13.53.131.225:3000/showLeaderBoard', { headers: { "Authorization": token } })
      try{
      if (response3.data.AllExpenses) {
       const allExpenses = response3.data.AllExpenses;
@@ -105,7 +105,7 @@ function showLeaderBoard(){
 
 function download(){
   const token = localStorage.getItem('token')
-  axios.get('http://51.20.41.30:3000/user/download', { headers: {"Authorization" : token} })
+  axios.get('http://13.53.131.225:3000/user/download', { headers: {"Authorization" : token} })
   .then((response) => {
       if(response.status === 200){
           console.log(response.data.fileURL);
@@ -115,7 +115,7 @@ function download(){
           }
 
 
-          axios.post('http://51.20.41.30:3000/user/postFileURL',obj,{ headers: {"Authorization" : token} })
+          axios.post('http://13.53.131.225:3000/user/postFileURL',obj,{ headers: {"Authorization" : token} })
           .then((response)=>{
               console.log(response)
           }).catch((err)=>{
@@ -140,7 +140,7 @@ function download(){
 function GetAllDownloads() {
   const token = localStorage.getItem('token');
 
-  axios.get('http://51.20.41.30:3000/user/listOfDownloads', { headers: { "Authorization": token } })
+  axios.get('http://13.53.131.225:3000/user/listOfDownloads', { headers: { "Authorization": token } })
     .then((response) => {
       if (response.status === 200) {
         const downloads = response.data.retrievedData;
@@ -210,7 +210,7 @@ window.addEventListener("DOMContentLoaded", async() => {
         showLeaderBoard()
       }
      
-   const response =  await axios.get("http://51.20.41.30:3000/get-expense", { headers: { "Authorization": token } });
+   const response =  await axios.get("http://13.53.131.225:3000/get-expense", { headers: { "Authorization": token } });
    console.log(response)
    if(response.data.message == false){
     console.log("No Data Found Yet")
@@ -230,7 +230,7 @@ window.addEventListener("DOMContentLoaded", async() => {
     document.getElementById('rzp-button').onclick = async function(e){
       const token = localStorage.getItem('token')
       console.log("%%%%%",token)
-    const response =  await axios.get("http://51.20.41.30:3000/purchase/premiummembership", { headers: { "Authorization": token } });
+    const response =  await axios.get("http://13.53.131.225:3000/purchase/premiummembership", { headers: { "Authorization": token } });
     
     console.log("response =",response)
 
@@ -244,7 +244,7 @@ var options = {
   handler: async function (response) {
     
     console.log("success response=",response)
-    const response2 = await axios.post("http://51.20.41.30:3000/purchase/updatetransactionstatus", {
+    const response2 = await axios.post("http://13.53.131.225:3000/purchase/updatetransactionstatus", {
       order_id: options.order_id,
       payment_id: response.razorpay_payment_id
     }, { headers: { "Authorization": token } });
@@ -267,7 +267,7 @@ var options = {
     e.preventDefault();
 
     rzp.on('payment.failed',async function(response){
-      await axios.post("http://51.20.41.30:3000/purchase/updatetransactionFailed", {
+      await axios.post("http://13.53.131.225:3000/purchase/updatetransactionFailed", {
       order_id: options.order_id,
       payment_id: response.razorpay_payment_id
     }, { headers: { "Authorization": token } });
@@ -314,7 +314,7 @@ async function updateExpenseTable(page) {
   console.log('hitemperpage = ',itemsPerPage)
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://51.20.41.30:3000/get-pagination?page=${page}&itemsPerPage=${itemsPerPage}`, { headers: { "Authorization": token } });
+        const response = await axios.get(`http://13.53.131.225:3000/get-pagination?page=${page}&itemsPerPage=${itemsPerPage}`, { headers: { "Authorization": token } });
         const data = response.data;
 
         // Clear the existing content

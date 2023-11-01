@@ -13,14 +13,15 @@ async function Login(event){
      /// which req should we made to check if login detail email exist or not
 
      console.log("Login Details:", loginDetails);
-     const response =  await axios.post(`http://51.20.41.30:3000/check-email-exists`, loginDetails)
+     const response =  await axios.post(`http://13.53.131.225:3000/check-email-exists`, loginDetails)
         console.log("data::::" ,response.data)
 
      if(response.data.Exist == true){
-        
+        debugger;
         alert("user logged in successfully")
 
-        localStorage.setItem('token',response.data.token)
+        localStorage.setItem('token',response.data.token);
+        console.log("test success");
 
         window.location.href = '../Expense/expense.html';
      }

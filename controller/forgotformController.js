@@ -32,7 +32,7 @@ const forgotpassword = async (req, res) => {
           from: 'pandeymrinalani02@gmail.com',
           to: email,
           subject: 'Sending with Nodemailer is Fun',
-          html: `<a href="http://51.20.41.30:3000/password/resetpassword/${id}">Reset your password</a>`,
+          html: `<a href="http://13.53.131.225:3000/password/resetpassword/${id}">Reset your password</a>`,
         };
   
         // Send the email using nodemailer
