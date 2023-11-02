@@ -84,7 +84,7 @@ Order.belongsTo(User)
 
 
 
-sequelize.sync({})
+sequelize.sync({force:true})
     .then(() => {
         console.log('Database and tables synced');
         app.listen(3000)
