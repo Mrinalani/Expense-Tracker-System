@@ -62,6 +62,7 @@ app.use((req, res, next) => {
 //      console.log('urlll', req.url);
    // res.sendFile(path.join(__dirname, `public/login/login.html`));
    console.log("cicd deployment testing")
+   console.log("build automation is working fine")
      res.sendFile(path.join(__dirname, `public/${req.url}`));
 
   });
