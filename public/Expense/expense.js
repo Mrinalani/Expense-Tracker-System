@@ -227,23 +227,44 @@ window.addEventListener("DOMContentLoaded", async() => {
   
     })
 
-    document.getElementById('rzp-button').onclick = async function(e){
-      const token = localStorage.getItem('token')
-      console.log("%%%%%",token)
-    const response =  await axios.get("http://13.53.131.225:3000/purchase/premiummembership", { headers: { "Authorization": token } });
+//     document.getElementById('rzp-button').onclick = async function(e){
+//       const token = localStorage.getItem('token')
+//       console.log("%%%%%",token)
+//     const response =  await axios.get("http://13.53.131.225:3000/purchase/premiummembership", { headers: { "Authorization": token } });
     
-    console.log("response =",response)
+//     console.log("response =",response)
 
-var options = {
-  key: response.data.key_id,// imp 
-  amount: 2500,  
-  currency: "INR",
-  name: "Random Company",
-  description: "Premium Membership",
-  order_id: response.data.order.id, 
-  handler: async function (response) {
+// var options = {
+//   key: response.data.key_id,// imp 
+//   amount: 2500,  
+//   currency: "INR",
+//   name: "Random Company",
+//   description: "Premium Membership",
+//   order_id: response.data.order.id, 
+//   handler: async function (response) {
     
-    console.log("success response=",response)
+//     console.log("success response=",response)
+
+document.getElementById('rzp-button').onclick = async function(e) {
+  const token = localStorage.getItem('token');
+  console.log("%%%%%", token);
+
+  const razorpayResponse = await axios.get("http://13.53.131.225:3000/purchase/premiummembership", {
+    headers: { "Authorization": token }
+  });
+
+  console.log("response =", razorpayResponse);
+
+  var options = {
+    key: razorpayResponse.data.key_id, // imp
+    amount: 2500,
+    currency: "INR",
+    name: "Random Company",
+    description: "Premium Membership",
+    order_id: razorpayResponse.data.order.id,
+    handler: async function(successResponse) {
+      console.log("success response =", successResponse);
+
     const response2 = await axios.post("http://13.53.131.225:3000/purchase/updatetransactionstatus", {
       order_id: options.order_id,
       payment_id: response.razorpay_payment_id
