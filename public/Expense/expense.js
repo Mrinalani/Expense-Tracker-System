@@ -261,7 +261,7 @@ var options = {
    
   }
 };
-function initializeRazorpay() {
+
     const rzp = new Razorpay(options);
     rzp.open();
     e.preventDefault();
@@ -275,7 +275,6 @@ function initializeRazorpay() {
       alert("something went wrong")
     })
     }
-  }
 
 
 // Add event listeners for pagination buttons
