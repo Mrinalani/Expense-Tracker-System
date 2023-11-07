@@ -17,7 +17,6 @@ async function Login(event){
         console.log("data::::" ,response.data)
 
      if(response.data.Exist == true){
-        debugger;
         alert("user logged in successfully")
 
         localStorage.setItem('token',response.data.token);
