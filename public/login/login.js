@@ -14,7 +14,8 @@ async function Login(event){
 
      console.log("Login Details:", loginDetails);
      const response =  await axios.post(`http://13.53.131.225:3000/check-email-exists`, loginDetails)
-        console.log("data::::" ,response.data)
+        console.log("Logindata::::=" ,response.data)
+
 
      if(response.data.Exist == true){
         alert("user logged in successfully")
