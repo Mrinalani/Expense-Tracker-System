@@ -58,6 +58,12 @@ app.use((req, res, next) => {
     return next();
 });
 
+app.use((req, res, next) => {
+    res.setHeader("Content-Security-Policy", "script-src 'self' https://cdnjs.cloudflare.com https://checkout.razorpay.com 'unsafe-inline'");
+    return next();
+});
+
+
   app.use((req, res) => {
 //      console.log('urlll', req.url);
    // res.sendFile(path.join(__dirname, `public/login/login.html`));
